@@ -154,8 +154,6 @@ public class AvailabilityService {
 
         // Saving Date into Availability Object
         availability.setDate(availabilityDto.getDate());
-
-
         List<TimeSlot> timeSlots = availabilityDto.getTimeSlots().stream()
                 .map(timeSlotDto -> new TimeSlot(timeSlotDto.getId(), availability, timeSlotDto.getTimeSlotValue()))
                 .collect(Collectors.toList());
