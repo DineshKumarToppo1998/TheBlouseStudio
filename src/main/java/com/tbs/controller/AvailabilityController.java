@@ -34,7 +34,7 @@ public class AvailabilityController {
 
     @PutMapping("/{date}")
     public ResponseEntity<Void> updateAvailability(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,@RequestBody List<TimeSlot> timeSlots){
-        availabilityService.updateAvailability(date, timeSlots);
+        availabilityService.updateAvailability_V3(date, timeSlots);
         return ResponseEntity.ok().build();
     }
 
