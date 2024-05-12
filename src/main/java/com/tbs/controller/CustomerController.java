@@ -24,12 +24,11 @@ public class CustomerController {
         return ResponseEntity.ok().body(customerService.saveCustomer(customerDto));
     }
 
-    @PutMapping("/update")
-    public String updateCustomer() {
-
-
-        return "Customer updated";
+    @PutMapping("/update/{id}")
+    public ResponseEntity<CustomerDto> updateCustomerById(@PathVariable Long id, @RequestBody CustomerDto customerDto) {
+        return ResponseEntity.ok().body(customerService.updateCustomer(id,customerDto));
     }
+
 
     @RequestMapping("/delete")
     public String deleteCustomer() {

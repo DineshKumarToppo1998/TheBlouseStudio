@@ -47,4 +47,18 @@ public class CustomerService {
             return null;
         }
     }
+
+    public CustomerDto updateCustomer(Long id, CustomerDto customerDto) {
+        Customer customer = customerRepository.findById(id).orElse(null);
+        if(customer != null) {
+            customer.setName(customerDto.getName());
+            customer.setEmail(customerDto.getEmail());
+            customer.setPhone(customerDto.getPhone());
+            customer.setAddress(customerDto.getAddress());
+            Customer updatedCustomer = customerRepository.save(customer);
+            return convertToDto(updatedCustomer);
+        } else {
+            return null;
+        }
+    }
 }
