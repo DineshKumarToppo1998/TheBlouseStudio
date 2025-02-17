@@ -1,0 +1,20 @@
+?prepareThreshold=0 - added in JDBC url as i was getting error 
+
+Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.jdbc.BadSqlGrammarException: Hibernate transaction: Unable to rollback against JDBC Connection; bad SQL grammar []] with root cause
+
+org.postgresql.util.PSQLException: ERROR: prepared statement "S_1" already exists
+
+STATUS - RESOLVED
+
+_______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+
+
+
