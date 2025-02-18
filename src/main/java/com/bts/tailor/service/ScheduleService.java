@@ -1,9 +1,12 @@
 package com.bts.tailor.service;
 
+import com.bts.tailor.model.SlotStatus;
 import com.bts.tailor.model.TimeSlot;
 import com.bts.tailor.repo.TimeSlotRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -59,5 +62,26 @@ public class ScheduleService {
      */
     public void deleteTimeSlot(Long timeSlotId) {
         timeSlotRepository.deleteById(timeSlotId);
+    }
+
+    /**
+     * Retrieves available time slots.
+     * If a date is provided (format: yyyy-MM-dd), filters time slots for that day.
+     * Otherwise, returns all available time slots.
+     *
+     * @param date the date in format yyyy-MM-dd (optional)
+     * @return List of available TimeSlot objects.
+     */
+    public List<TimeSlot> getAvailableTimeSlots(String date) {
+        if (date == null || date.trim().isEmpty()) {
+            // Return all available time slots if no date is provided.
+            return timeSlotRepository.findByStatus(SlotStatus.AVAILABLE);
+        }
+        // Parse the date and create start and end of day bounds.
+        LocalDate localDate = LocalDate.parse(date);
+        LocalDateTime startOfDay = localDate.atStartOfDay();
+        LocalDateTime endOfDay = localDate.plusDays(1).atStartOfDay();
+
+        return timeSlotRepository.findByStartTimeBetweenAndStatus(startOfDay, endOfDay, SlotStatus.AVAILABLE);
     }
 }

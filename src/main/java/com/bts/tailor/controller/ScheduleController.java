@@ -1,3 +1,4 @@
+/*
 package com.bts.tailor.controller;
 
 import com.bts.tailor.model.TimeSlot;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/schedule")
+@RequestMapping("/api/schedule/v2")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
@@ -17,10 +18,12 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    /**
+    */
+/**
      * Retrieve available time slots.
      * Optional query parameter "date" (format: yyyy-MM-dd) to filter slots.
-     */
+     *//*
+
     @GetMapping
     public ResponseEntity<List<TimeSlot>> getAvailableTimeSlots(
             @RequestParam(value = "date", required = false) String date) {
@@ -31,3 +34,4 @@ public class ScheduleController {
         return ResponseEntity.ok(slots);
     }
 }
+*/

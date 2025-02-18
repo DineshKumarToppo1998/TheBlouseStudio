@@ -39,6 +39,12 @@ public class Order {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+
     public Order(Long customerId, Measurements measurements, String voiceNoteUrl, Long timeSlotId, OrderStatus orderStatus) {
+        this.customerId = customerId;
+        this.measurements = measurements;
+        this.voiceNoteUrl = voiceNoteUrl;
+        this.timeSlotId = timeSlotId;
+        this.status = orderStatus;
     }
 }

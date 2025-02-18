@@ -112,4 +112,21 @@ public class OrderService {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Retrieves orders for a specific customer. If status is provided,
+     * filters orders by the given status.
+     *
+     * @param customerId the customer's ID.
+     * @param status (optional) the status of orders to filter by.
+     * @return List of orders matching the criteria.
+     */
+    public List<Order> getOrdersForCustomer(Long customerId, String status) {
+        if (status == null || status.trim().isEmpty()) {
+            return orderRepository.findByCustomerId(customerId);
+        } else {
+            OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
+            return orderRepository.findByCustomerIdAndStatus(customerId, orderStatus);
+        }
+    }
 }
