@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
+import org.springframework.core.io.InputStreamResource;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class VoiceNoteService {
     }
 
     // Upload file to Supabase Storage
-    public String uploadFile(byte[] fileData, String originalFileName) {
+    public String uploadFile(InputStream inputStream, String originalFileName, long contentLength) {
         String uniqueFileName = UUID.randomUUID() + "-" + originalFileName;
         String uploadUrl = String.format("%s/storage/v1/object/%s/%s", supabaseUrl, bucketName, uniqueFileName);
 
@@ -39,8 +41,9 @@ public class VoiceNoteService {
         headers.set("Authorization", "Bearer " + supabaseKey);
         headers.set("apikey", supabaseKey);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentLength(contentLength);
 
-        HttpEntity<byte[]> requestEntity = new HttpEntity<>(fileData, headers);
+        HttpEntity<InputStreamResource> requestEntity = new HttpEntity<>(new InputStreamResource(inputStream), headers);
         ResponseEntity<String> response = restTemplate.exchange(uploadUrl, HttpMethod.PUT, requestEntity, String.class);
 
         if (response.getStatusCode().is2xxSuccessful()) {

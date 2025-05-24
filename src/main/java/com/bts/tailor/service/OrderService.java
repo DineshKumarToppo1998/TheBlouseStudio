@@ -77,15 +77,16 @@ public class OrderService {
     }
 
 
-    // Method to create an order
-    public Order createOrder(OrderRequest orderRequest, MultipartFile voiceNoteFile) {
-        try {
+import java.io.InputStream;
 
-            byte[] fileData = voiceNoteFile.getBytes();
+// Method to create an order
+    public Order createOrder(OrderRequest orderRequest, MultipartFile voiceNoteFile) {
+        try (InputStream inputStream = voiceNoteFile.getInputStream()) {
             String originalFileName = voiceNoteFile.getOriginalFilename();
+            long contentLength = voiceNoteFile.getSize();
 
             // Upload the voice note and retrieve its URL
-            String voiceNoteUrl = voiceNoteService.uploadFile(fileData, originalFileName);
+            String voiceNoteUrl = voiceNoteService.uploadFile(inputStream, originalFileName, contentLength);
 
             // Build the Measurements object
             Measurements measurements = new Measurements(
@@ -109,7 +110,7 @@ public class OrderService {
             // Save the order to the database
             return orderRepository.save(order);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to create order: " + e.getMessage(), e);
         }
     }
 
