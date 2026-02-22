@@ -5,24 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "time_slots")
-public class TimeSlot {
-
+@Table(name = "day_slots")
+public class DaySlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long timeSlotId;
+    private Long id;
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
-    private SlotStatus status; // e.g., AVAILABLE, BOOKED, UNAVAILABLE
+    private SlotStatus status;
 
 
 }

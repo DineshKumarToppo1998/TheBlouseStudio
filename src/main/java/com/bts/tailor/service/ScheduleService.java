@@ -2,6 +2,7 @@ package com.bts.tailor.service;
 
 import com.bts.tailor.model.SlotStatus;
 import com.bts.tailor.model.TimeSlot;
+import com.bts.tailor.repo.DaySlotRepository;
 import com.bts.tailor.repo.TimeSlotRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,11 @@ import java.util.List;
 public class ScheduleService {
 
     private final TimeSlotRepository timeSlotRepository;
+    private final DaySlotRepository daySlotRepository;
 
-    public ScheduleService(TimeSlotRepository timeSlotRepository) {
+    public ScheduleService(TimeSlotRepository timeSlotRepository, DaySlotRepository daySlotRepository) {
         this.timeSlotRepository = timeSlotRepository;
+        this.daySlotRepository = daySlotRepository;
     }
 
     /**
@@ -83,5 +86,11 @@ public class ScheduleService {
         LocalDateTime endOfDay = localDate.plusDays(1).atStartOfDay();
 
         return timeSlotRepository.findByStartTimeBetweenAndStatus(startOfDay, endOfDay, SlotStatus.AVAILABLE);
+    }
+
+    public int getAvailableDays() {
+        LocalDate today = LocalDate.now();
+        LocalDate futureDate = today.plusDays(14);
+        return daySlotRepository.findByDateBetweenAndStatus(today, futureDate, SlotStatus.AVAILABLE).size();
     }
 }

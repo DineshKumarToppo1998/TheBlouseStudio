@@ -5,6 +5,7 @@ import com.bts.tailor.repo.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,11 +15,13 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final VoiceNoteService voiceNoteService; // for handling file uploads
+    private final ScheduleService scheduleService; // for handling schedule information
 
     // Constructor Injection
-    public OrderService(OrderRepository orderRepository, VoiceNoteService voiceNoteService) {
+    public OrderService(OrderRepository orderRepository, VoiceNoteService voiceNoteService, ScheduleService scheduleService) {
         this.orderRepository = orderRepository;
         this.voiceNoteService = voiceNoteService;
+        this.scheduleService = scheduleService;
     }
 
     /**
@@ -67,17 +70,29 @@ public class OrderService {
     /**
      * Retrieves dashboard statistics such as the count of orders by status.
      *
-     * @return DashboardStats object containing counts of pending, accepted, and rejected orders.
+     * @return DashboardStats object containing counts of pending, accepted, and rejected orders,
+     *         as well as availability information.
      */
     public DashboardStats getDashboardStats() {
         int pending = orderRepository.countByStatus(OrderStatus.PENDING);
         int accepted = orderRepository.countByStatus(OrderStatus.ACCEPTED);
         int rejected = orderRepository.countByStatus(OrderStatus.REJECTED);
-        return new DashboardStats(pending, accepted, rejected);
+
+        LocalDateTime now = LocalDateTime.now();
+        // Get available time slots count
+//        List<TimeSlot> availableSlots = scheduleService.getAvailableTimeSlots(LocalDate.now().toString());
+//        int availableTimeSlots = availableSlots.size();
+
+        int availableDays = scheduleService.getAvailableDays();
+
+        // Determine admin availability
+        boolean isAdminAvailable = availableDays > 0;
+
+        return new DashboardStats(pending, accepted, rejected, availableDays, isAdminAvailable);
     }
 
 
-import java.io.InputStream;
+
 
 // Method to create an order
     public Order createOrder(OrderRequest orderRequest, MultipartFile voiceNoteFile) {

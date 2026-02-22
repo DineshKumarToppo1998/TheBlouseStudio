@@ -11,4 +11,7 @@ public class DashboardStats {
     private int pendingOrders;
     private int acceptedOrders;
     private int rejectedOrders;
+//    private int availableTimeSlots;
+    private int availableDays;
+    private boolean isAdminAvailable;
 }
